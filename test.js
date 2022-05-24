@@ -19,11 +19,13 @@ let MetricsSigmaObj =
 };
 
 
-for (let i = 0; i < 2; i++) {
-    for (j in sample_obj.nodeMetricsValue[2]) {
-        console.log(sample_obj.nodeMetricsValue[i][j]);
-        console.log("Sigma=" + MetricsSigmaObj[j]);
-    }
-}
+// for (let i = 0; i < 2; i++) {
+//     for (j in sample_obj.nodeMetricsValue[2]) {
+//         console.log(sample_obj.nodeMetricsValue[i][j]);
+//         console.log("Sigma=" + MetricsSigmaObj[j]);
+//     }
+// }
 
-// console.log(MetricsSigmaObj);
+for (i in MetricsSigmaObj) {
+    console.log(i);
+}

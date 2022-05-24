@@ -13,30 +13,7 @@ w3 = new Web3(
 let my_address = process.env.PUBLIC_KEY;
 let private_key = process.env.PRIVATE_KEY;
 
-// let sample_requestObj_from_client =
-// {
-//     contractAddress: "0x47B7A6d6dC9aFeF8Ef950DBA10deB1AD59E36B08",
-//     nodeMetricsValue: [{
-//         CPU: 9,
-//         MEMORY: 20
-//     },
-//     {
-//         CPU: 20,
-//         MEMORY: 20
-//     },
-//     {
-//         CPU: 10,
-//         MEMORY: 20
-//     },
-//     {
-//         CPU: 11,
-//         MEMORY: 20
-//     },
-//     {
-//         CPU: 13,
-//         MEMORY: 20
-//     },]
-// };
+
 
 let MetricsSigmaObj = null;
 let NodeAmount = null;
@@ -47,17 +24,22 @@ let nodeTVAry = null;
 // latest TE TV that computed by this agent
 let currentNodeTEAry = null;
 let currentNodeTVAry = null;
-
+let round = null;
 const init = async (obj) => {
     // NodeAmount
     NodeAmount = obj.nodeMetricsValue.length;
-
+    round = 100000000;
     // TODO:check which smartContract Address to store
     store_contractAddr = process.env.SIDE_CHIAN1_CONTRACT;
     console.log(store_contractAddr);
     // set Metrics Sigma
     MetricsSigmaObj = {
-        "CPU": 2
+        "CPU": 90,
+        "Availability": 0,
+        "DiscardedTransaction": 90,
+        "OutstandingTransaction": 90,
+        "Memory": 90,
+        "Storage": 90
     };
 
     currentNodeTEAry = new Array();
@@ -76,6 +58,9 @@ const init = async (obj) => {
 const RayleighCDF = (metric, sigma) => {
     return 1 - Math.exp(-(metric ** 2) / (2 * sigma ** 2));
 }
+const RayleighCDF_reverse = (metric, sigma) => {
+    return Math.exp(-(metric ** 2) / (2 * sigma ** 2));
+}
 
 
 const computeNodesTE = (obj) => {
@@ -86,11 +71,16 @@ const computeNodesTE = (obj) => {
             // console.log("retrieving '" + MetricsDataObj[j].name + "' data");
             let metric = obj.nodeMetricsValue[i][j];
             // console.log("metric : " + metric);
-            TE *= RayleighCDF(metric, MetricsSigmaObj[j]);
+
+            if (MetricsSigmaObj[j] === 0) {
+                TE *= metric
+            } else {
+                TE *= RayleighCDF_reverse(metric, MetricsSigmaObj[j]);
+            }
             // console.log(TE);
         }
         // There's no float in smart contract
-        currentNodeTEAry.push(TE.toString());
+        currentNodeTEAry.push((Math.round(TE * round) / round).toString());
     }
 }
 
@@ -132,7 +122,7 @@ const computeNodesTV = () => {
         } else {
             TV = (1 / e) * latest_TE_i * weight + (Math.exp(-2 * param_x) * nodeTVAry[i][previous_i] / e);
         }
-        currentNodeTVAry.push(TV.toString());
+        currentNodeTVAry.push((Math.round(TV * round) / round).toString());
         // console.log("-------------------------------------------------");
     }
 }

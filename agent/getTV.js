@@ -9,14 +9,16 @@ w3 = new Web3(
     process.env.BLOCKCHAIN_RPC
 )
 
-let nodeTVAry = new Array();
+let nodeTVAry = null;
 let round = null;
 const init = () => {
     NodeAmount = 5;
     round = 1000;
+    nodeTVAry = new Array();
 }
 
 const getAvgTV = async (addr) => {
+
     let contract = new w3.eth.Contract(abi, addr);
     for (let i = 0; i < NodeAmount; i++) {
         nodeTVAry.push(await contract.methods.retrieveTV(i).call());
