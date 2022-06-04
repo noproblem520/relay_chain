@@ -3,9 +3,6 @@ let smartContractJson = require('../public/smartcontracts/sideChain.json');
 let abi = smartContractJson.abi;
 require('dotenv').config();
 w3 = new Web3(
-    // # demo1's blockchain
-    // # Web3.HTTPProvider("HTTP://140.118.9.225:23001")
-    //  VM blockchai
     process.env.BLOCKCHAIN_RPC
 )
 

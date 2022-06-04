@@ -5,9 +5,6 @@ let bytecode = smartContractJson.bytecode;
 
 require('dotenv').config();
 w3 = new Web3(
-    // # demo1's blockchain
-    // # Web3.HTTPProvider("HTTP://140.118.9.225:23001")
-    //  VM blockchain
     process.env.BLOCKCHAIN_RPC
 )
 let my_address = process.env.PUBLIC_KEY;
@@ -26,13 +23,15 @@ const deploySmartContract = () => {
         gasLimit: 6721975,
         data: deployData
     }
-
-    w3.eth.accounts.signTransaction(tx, private_key).then(signed => {
+    var contractaddr = '';
+    w3.eth.accounts.signTransaction(tx, private_key).then(async (signed) => {
         w3.eth.sendSignedTransaction(signed.rawTransaction).then((result) => {
-            // TODO：save the contractAddress to the database
-            console.log("contractAddress is " + result.contractAddress)
+            contractaddr = result.contractAddress;
+            console.log("contractAddress is " + result.contractAddress);
         });
     });
+
+    return contractaddr;
 }
 
 

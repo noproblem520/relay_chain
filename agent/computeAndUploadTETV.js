@@ -4,9 +4,6 @@ let abi = smartContractJson.abi;
 require('dotenv').config();
 
 w3 = new Web3(
-    // # demo1's blockchain
-    // # Web3.HTTPProvider("HTTP://140.118.9.225:23001")
-    //  VM blockchain
     process.env.BLOCKCHAIN_RPC
 )
 
@@ -25,12 +22,12 @@ let nodeTVAry = null;
 let currentNodeTEAry = null;
 let currentNodeTVAry = null;
 let round = null;
-const init = async (obj) => {
+const init = async (obj, contractAddress) => {
     // NodeAmount
     NodeAmount = obj.nodeMetricsValue.length;
     round = 100000000;
     // TODO:check which smartContract Address to store
-    store_contractAddr = process.env.SIDE_CHIAN1_CONTRACT;
+    store_contractAddr = contractAddress;
     console.log(store_contractAddr);
     // set Metrics Sigma
     MetricsSigmaObj = {
@@ -128,8 +125,8 @@ const computeNodesTV = () => {
 }
 
 
-const start = async (obj) => {
-    await init(obj);
+const start = async (obj, contractAddress) => {
+    await init(obj, contractAddress);
     console.log("Start computing TE...");
     computeNodesTE(obj);
     console.log("Start computing TV...");
@@ -173,8 +170,8 @@ const uploadTETV = async () => {
 
 // step：getPrevious TE and TV => getMetricsData =>  => computeTE => computeTV => upload TE TV to SmartContract
 module.exports = {
-    runAgent: async (obj) => {
+    runAgent: async (obj, contractAddress) => {
         console.log("now is uploading");
-        await start(obj);
+        await start(obj, contractAddress);
     }
 }
