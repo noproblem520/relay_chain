@@ -24,14 +24,14 @@ router.post('/smartcontract', async function (req, res, next) {
         public_key = ellipticcurve.PublicKey.fromPem("-----BEGIN PUBLIC KEY-----\nMFYwEAYHKoZIzj0CAQYFK4EEAAoDQgAE8PJ19JL3SonmYaAoGB259ETeVXIX4a3I\nW3es3PlrfsutkHs4apZeP2xW4zqAxxyIqQnWnwI+HnKxZSY5DukuxQ==\n-----END PUBLIC KEY-----");
     } else {
         contractAddr = process.env.SIDE_CHAIN2_CONTRACT;
-        public_key = ellipticcurve.PublicKey.fromPem("-----BEGIN PUBLIC KEY-----MFYwEAYHKoZIzj0CAQYFK4EEAAoDQgAEA8OnCk5cFs4A6AFS1FiGmBSdUmxX58l97v1+OJKeXHAjthlLhPM9IG70u6yLSiiiCDpV0hSZuJNSk2NIXgyEYA==-----END PUBLIC KEY-----");
+        public_key = ellipticcurve.PublicKey.fromPem("-----BEGIN PUBLIC KEY-----\nMFYwEAYHKoZIzj0CAQYFK4EEAAoDQgAEA8OnCk5cFs4A6AFS1FiGmBSdUmxX58l9\n7v1+OJKeXHAjthlLhPM9IG70u6yLSiiiCDpV0hSZuJNSk2NIXgyEYA==\n-----END PUBLIC KEY-----");
     }
-    if (Ecdsa.verify(JSON.stringify(msg), signature, public_key)) {
-        await agent_uploadTETV.runAgent(msg, contractAddr);
-        res.send("Success!");
-    } else {
-        res.send("signature verification process error!");
-    }
+    // if (Ecdsa.verify(JSON.stringify(msg), signature, public_key)) {
+    //     await agent_uploadTETV.runAgent(msg, contractAddr);
+    //     res.send("Success!");
+    // } else {
+    //     res.send("signature verification process error!");
+    // }
 });
 
 module.exports = router;

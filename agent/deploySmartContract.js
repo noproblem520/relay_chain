@@ -23,15 +23,11 @@ const deploySmartContract = () => {
         gasLimit: 6721975,
         data: deployData
     }
-    var contractaddr = '';
     w3.eth.accounts.signTransaction(tx, private_key).then(async (signed) => {
         w3.eth.sendSignedTransaction(signed.rawTransaction).then((result) => {
-            contractaddr = result.contractAddress;
             console.log("contractAddress is " + result.contractAddress);
         });
     });
-
-    return contractaddr;
 }
 
 
